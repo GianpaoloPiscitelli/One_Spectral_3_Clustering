@@ -21,10 +21,11 @@ function [cutpart1S1,cutpart1S2,cutpart1S3,cutpart1S4] = compute4thCutValue(clus
 % An Inverse Power Method for Nonlinear Eigenproblems with Applications in 1-Spectral Clustering and Sparse PCA
 % In Advances in Neural Information Processing Systems 23 (NIPS 2010)
 %
-% (C)2019 Antonio Corbo Esposito, Domenico Angelo La Manna and Gianpaolo Piscitelli
+% (C)2020-21 Antonio Corbo Esposito and Gianpaolo Piscitelli
 % Dipartimento di Ingegneria Elettrica e dell'Informazione "M. Scarano",
 % Via G. Di Biasio 43
 % Università degli studi di Cassino e del Lazio Meridionale
+% https://github.com/GianpaoloPiscitelli/One_Spectral_3_Clustering
 
 n=size(W,1);
 for i=1:n

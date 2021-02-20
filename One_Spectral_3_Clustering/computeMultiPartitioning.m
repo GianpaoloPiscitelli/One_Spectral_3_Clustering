@@ -1,6 +1,9 @@
-function [clusters,cuts,cheegers,vmin] = computeMultiPartitioning2nd(W,normalized,k,init2nd,numTrials,criterion_threshold,criterion_multicluster,verbosity)
+function [clusters,cuts,cheegers] = computeMultiPartitioning(W,normalized,k,init2nd,numTrials,criterion_threshold,criterion_multicluster,verbosity)
 % Computes a multipartitioning of the data given by a similarity matrix W 
-% by recursively computing bipartitions using second eigenvector of the 1-Laplacian.
+% by recursively computing bipartitions using eigenvectors of the 1-Laplacian.
+%
+% Usage:	[clusters,cuts,cheegers] 
+%           = computeMultiPartitioning(W,normalized,k,init2nd,numTrials,criterion_threshold,criterion_multicluster,verbosity)
 %
 % Input:
 %   W: Sparse weight matrix. Has to be symmetric.
@@ -22,20 +25,10 @@ function [clusters,cuts,cheegers,vmin] = computeMultiPartitioning2nd(W,normalize
 %   each partitioning step.
 %   cheegers: (k-1)x1 vector containing the Ratio/Normalized Cheeger Cut 
 %   values after each partitioning step.
-%   vmin: the second eigenfunction.
 %
-% This file is obtained by a modification of OneSpectralClustering.m,
-% elaborated by M. Hein and T. Bühler 
-% (Machine Learning Group, Saarland University, Germany, http://www.ml.uni-saarland.de)
-% for the paper:
-% An Inverse Power Method for Nonlinear Eigenproblems with Applications in 1-Spectral Clustering and Sparse PCA
-% In Advances in Neural Information Processing Systems 23 (NIPS 2010)
-%
-% (C)2020-21 Antonio Corbo Esposito and Gianpaolo Piscitelli
-% Dipartimento di Ingegneria Elettrica e dell'Informazione "M. Scarano",
-% Via G. Di Biasio 43
-% Università degli studi di Cassino e del Lazio Meridionale
-% https://github.com/GianpaoloPiscitelli/One_Spectral_3_Clustering
+% (C)2010-11 Thomas Buehler and Matthias Hein
+% Machine Learning Group, Saarland University, Germany
+% http://www.ml.uni-saarland.de
 
     num=size(W,1);
     
@@ -63,7 +56,7 @@ function [clusters,cuts,cheegers,vmin] = computeMultiPartitioning2nd(W,normalize
         
     cut=inf;
     cheeger=inf;
-    
+   
     % Check if graph is connected
     [comp,connected,sizes]=connectedComponents(W);
     if(~connected)
@@ -80,8 +73,7 @@ function [clusters,cuts,cheegers,vmin] = computeMultiPartitioning2nd(W,normalize
             if(flag) % if eigenvector computation succeeded
                 start = createClustersGeneral(start,W,normalized,threshold_type,criterion_threshold,deg2,true);
                 if (sum(start)>sum(start==0)) start=1-start; end
-                start=start/sum(start);
-    
+                start=start/sum(start);    
 
                 % Computing partitioning initialized with second eigenvector.
                 if(verbosity>=2) disp(['...Computing nonlinear eigenvector of graph 1-Laplacian. ',...

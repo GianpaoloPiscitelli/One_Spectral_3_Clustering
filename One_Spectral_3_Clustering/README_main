@@ -1,0 +1,84 @@
+1-SPECTRAL CLUSTERING
+
+
+This archive contains a Matlab implementation of 1-Spectral 3-Clustering 
+as described in the paper
+
+
+% This file is obtained by a modification of OneSpectralClustering.m,
+% elaborated by M. Hein and T. Bühler 
+% (Machine Learning Group, Saarland University, Germany, http://www.ml.uni-saarland.de)
+% for the paper:
+% An Inverse Power Method for Nonlinear Eigenproblems with Applications in 1-Spectral Clustering and Sparse PCA
+% In Advances in Neural Information Processing Systems 23 (NIPS 2010)
+%
+% (C) 2019-20 Antonio Corbo Esposito and Gianpaolo Piscitelli
+% Dipartimento di Ingegneria Elettrica e dell'Informazione "M. Scarano",
+% Via G. Di Biasio 43
+% Università degli studi di Cassino e del Lazio Meridionale
+% https://github.com/GianpaoloPiscitelli/One_Spectral_3_Clustering
+
+
+INSTALLATION
+
+The implementation uses a mex-file to solve the inner problem of the
+inverse power method. Compile it using 
+
+mex -largeArrayDims solveInnerProblem.cpp 
+
+in the matlab command line.
+
+
+SHORT DOCUMENTATION
+
+For more information, type help functionname in the Matlab command line.
+
+Usage: [clusters3f,cheeger3f] = main(W)
+
+Input: 
+	W: Sparse weight matrix. Has to be symmetric.
+	
+Output:
+        clusters3f: vector indicating the computed 3-clustering 
+        cheeger3f: the corresponding Cheeger constant
+ 
+ 
+LICENSE
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+If you use this code for your publication, please include a reference 
+to the paper "An inverse power method for nonlinear eigenproblems with 
+applications in 1-spectral clustering and sparse PCA".
+ 
+
+FILE SEQUENCE PATTERN
+     main
+	OneSpectralClustering2nd
+	   computeMultiPartitioning2nd
+		computeEigenvectorGeneral
+		   weighted_median
+		   solveInnerProblem
+		   createClustersGeneral
+			computeCutValue
+	OneSpectralClustering3rd
+	   computeMultiPartitioning3rd		
+		compute3rdEigenvectorGenerals
+		   weighted_median
+		   falseProd
+		   solveInnerProblem
+		   create3rdClustersGeneral
+			computeCutValue
+	compute3rdCutValue
+	compute4thCutValue

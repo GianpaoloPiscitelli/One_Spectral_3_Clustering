@@ -26,9 +26,20 @@ function [allClusters, cut,cheeger,cutPart1,cutPart2,threshold] =  create3rdClus
 %   Ratio/Normalized Cheeger Cut.
 %   threshold: The threshold used to obtain the partitioning.
 %
-% (C)2010-11 Thomas Buehler and Matthias Hein
-% Machine Learning Group, Saarland University, Germany
-% http://www.ml.uni-saarland.de
+
+% This file is obtained by a modification of OneSpectralClustering.m,
+% elaborated by M. Hein and T. Bühler 
+% (Machine Learning Group, Saarland University, Germany, http://www.ml.uni-saarland.de)
+% for the paper:
+% An Inverse Power Method for Nonlinear Eigenproblems with Applications in 1-Spectral Clustering and Sparse PCA
+% In Advances in Neural Information Processing Systems 23 (NIPS 2010)
+%
+% (C)2020-21 Antonio Corbo Esposito and Gianpaolo Piscitelli
+% Dipartimento di Ingegneria Elettrica e dell'Informazione "M. Scarano",
+% Via G. Di Biasio 43
+% Università degli studi di Cassino e del Lazio Meridionale
+% https://github.com/GianpaoloPiscitelli/One_Spectral_3_Clustering
+
 
     % Default values for deg
     if (nargin<6)
