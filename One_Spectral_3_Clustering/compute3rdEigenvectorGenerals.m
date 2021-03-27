@@ -28,6 +28,7 @@ function [fold,FctValOuter]=compute3rdEigenvectorGenerals(W,eigv,fold,normalized
 % Università degli studi di Cassino e del Lazio Meridionale
 % https://github.com/GianpaoloPiscitelli/One_Spectral_3_Clustering
 
+n=size(W);
     if(nargin<5)
         verbose=true;
     end
@@ -52,18 +53,40 @@ function [fold,FctValOuter]=compute3rdEigenvectorGenerals(W,eigv,fold,normalized
 	pars.epsilon = 1E-14; 
 	%pars.tv = 'l1';
 	maxiterations = 100;
-    normL1=Inf;
+    %normL1=Inf;
+    Iprec=-Inf;
+    I=0;
+    G=0;
+    for i=1:n
+        G=G+(abs(fold(i))*deg(i));
+        for j=1:n
+                I=I+W(i,j)*abs(fold(i)-fold(j));
+        end
+    end
+    I=I/G;
 
-    while (sum(abs(fold))<normL1)       
+    %while (sum(abs(fold))<normL1) 
+    while (I>Iprec) 
         % Subtract median
         if (~normalized)
             fold = fold - median(fold);
-            fold = PseudoProd(W,fold,eigv,deg);
+            %fold = PseudoProd(W,fold,eigv,deg);
+            fold = PseudoOrt(W,fold,eigv,deg);
         else
             fold = fold - weighted_median(fold,deg);
-            fold = PseudoProd(W,fold,eigv,deg);
+            %fold = PseudoProd(W,fold,eigv,deg);
+            fold = PseudoOrt(W,fold,eigv,deg);
         end
-        normL1=sum(abs(fold));
+        Iprec=I;
+        I=0;
+        G=0;
+        for i=1:n
+            for j=1:n
+                I=I+W(i,j)*abs(fold(i)-fold(j));
+            end
+        end
+        %normL1=sum(abs(fold));
+        I=I/G;
     end
     
 	counter=0;
@@ -157,18 +180,39 @@ function [fold,FctValOuter]=compute3rdEigenvectorGenerals(W,eigv,fold,normalized
             disp(['-- Original Obj: ',num2str(Obj2,'%1.16f'),' - Zeros: ',num2str(sum(fold==0)),' - Balance: ',num2str(sum(sign(fold)))]);
         end
         
-        normL1=Inf;
-
-        while (sum(abs(fnew))<normL1)       
+        %normL1=Inf;
+        Iprec=-Inf;
+        I=0;
+        G=0;
+        for i=1:n
+            for j=1:n
+                I=I+W(i,j)*abs(fold(i)-fold(j));
+            end
+        end
+        I=I/G;
+        
+        %while (sum(abs(fnew))<normL1)
+        while (I>Iprec)
             % Subtract median
             if (~normalized)
                 fnew = fnew - median(fnew);
                 fnew = PseudoProd(W,fnew,eigv,deg);
+                %fnew = PseudoOrt(W,fnew,eigv,deg);
             else
                 fnew = fnew - weighted_median(fnew,deg);
                 fnew = PseudoProd(W,fnew,eigv,deg);
+                %fnew = PseudoOrt(W,fnew,eigv,deg);
             end
-            normL1=sum(abs(fnew));
+            %normL1=sum(abs(fnew));
+            Iprec=I;
+            I=0;
+            G=0;
+            for i=1:n
+                for j=1:n
+                    I=I+W(i,j)*abs(fold(i)-fold(j));
+                end
+            end
+            I=I/G;
         end              
         fnew = fnew/norm(fnew,1);
 	 
